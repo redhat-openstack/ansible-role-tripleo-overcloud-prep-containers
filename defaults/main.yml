@@ -1,0 +1,7 @@
+---
+# defaults file for ansible-role-tripleo-overcloud-prep-containers
+containerized_compute: false
+overcloud_prep_containers_script: overcloud-prep-containers.sh.j2
+containers_default_parameters: container-default-parameters.yaml.j2
+container_image: Fedora-Cloud-Atomic-22-20150521.x86_64.qcow2
+container_url: "https://download.fedoraproject.org/pub/fedora/linux/releases/22/Cloud/x86_64/Images/{{ container_image }}"

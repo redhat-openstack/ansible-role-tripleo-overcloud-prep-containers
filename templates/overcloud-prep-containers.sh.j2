@@ -1,0 +1,77 @@
+#!/bin/bash
+
+set -eux
+
+### --start_docs
+## Prepare the undercloud for deploying the containerized compute node
+## ===================================================================
+
+## note:: In progress documentation is available at https://etherpad.openstack.org/p/tripleo-containers-work
+##::
+
+## Prepare Your Environment
+## ------------------------
+
+## * Source in the undercloud credentials.
+## ::
+
+source {{ working_dir }}/stackrc
+
+{% if containerized_compute %}
+## * Download the Cloud Atomic Image and upload to glance
+## ::
+
+wget {{ container_url }}
+glance image-create --name atomic-image --file {{ container_image }} --disk-format qcow2 --container-format bare
+
+{% endif %}
+
+{% if release != "master" %}
+## note:: On TripleO master, docker and docker-registry are installed and enabled. On older releases the following may be required:
+## ::
+
+sudo yum install -y docker
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo systemctl enable docker-registry
+sudo systemctl start docker-registry
+sudo pip install docker-py
+
+{% endif %}
+
+## * Populate the docker registery
+## ::
+
+python -c "from tripleo_common.image.image_uploader import ImageUploadManager ; ImageUploadManager(['/home/stack/tripleo-common/contrib/overcloud_containers.yaml']).upload()"
+
+## * Configure the environments/docker.yaml, this is done automatically.
+## ::
+
+cat /home/stack/containers-default-parameters.yaml
+
+## * Rebuild heat-agents image and push to local registry
+## ::
+
+docker build -t "localhost:8787/tripleoupstream/heat-docker-agents:mitaka" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
+docker push localhost:8787/tripleoupstream/heat-docker-agents:mitaka
+
+## * Update TripleO-Common
+git clone https://github.com/openstack/tripleo-common.git
+pushd tripleo-common
+
+sudo rm -Rf /usr/lib/python2.7/site-packages/tripleo_common*
+sudo python setup.py install
+sudo cp /usr/share/tripleo-common/sudoers /etc/sudoers.d/tripleo-common
+sudo systemctl restart openstack-mistral-executor
+sudo systemctl restart openstack-mistral-engine # this loads the actions via entrypoints
+sudo mistral-db-manage populate # make sure the new actions got loaded
+mistral action-list | grep tripleo
+for workbook in workbooks/*.yaml; do
+    mistral workbook-update $workbook
+done
+
+popd
+
+
+
+### --stop_docs
