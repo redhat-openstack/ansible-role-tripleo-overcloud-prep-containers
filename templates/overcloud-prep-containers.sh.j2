@@ -35,14 +35,56 @@ sudo systemctl enable docker
 sudo systemctl start docker
 sudo systemctl enable docker-registry
 sudo systemctl start docker-registry
-sudo pip install docker-py
+sudo easy_install docker-py
 
 {% endif %}
+
+## * Checkout TripleO-Common
+## ::
+git clone https://github.com/openstack/tripleo-common.git
+
+## * Create Overcloud Containers Uploads template
+## ::
+
+bash -c 'cat <<EOF > /home/stack/tripleo-common/contrib/overcloud_containers.yaml
+# put this in /home/stack/tripleo-common/contrib/
+uploads:
+    - imagename: tripleoupstream/heat-docker-agents:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+    - imagename: tripleoupstream/centos-binary-nova-compute:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+    - imagename: tripleoupstream/centos-binary-nova-libvirt:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+    - imagename: tripleoupstream/centos-binary-keystone:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+    - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+    - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+    - imagename: tripleoupstream/centos-binary-openvswitch-db-server:mitaka
+      uploader: docker
+      pull_source: docker.io
+      push_destination: 192.168.24.1:8787
+EOF'
+
+
 
 ## * Populate the docker registery
 ## ::
 
-python -c "from tripleo_common.image.image_uploader import ImageUploadManager ; ImageUploadManager(['/home/stack/tripleo-common/contrib/overcloud_containers.yaml']).upload()"
+sudo python -c "from tripleo_common.image.image_uploader import ImageUploadManager ; ImageUploadManager(['/home/stack/tripleo-common/contrib/overcloud_containers.yaml']).upload()"
 
 ## * Configure the environments/docker.yaml, this is done automatically.
 ## ::
@@ -52,11 +94,10 @@ cat /home/stack/containers-default-parameters.yaml
 ## * Rebuild heat-agents image and push to local registry
 ## ::
 
-docker build -t "localhost:8787/tripleoupstream/heat-docker-agents:mitaka" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
-docker push localhost:8787/tripleoupstream/heat-docker-agents:mitaka
+docker build -t "192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
+docker push 192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka
 
 ## * Update TripleO-Common
-git clone https://github.com/openstack/tripleo-common.git
 pushd tripleo-common
 
 sudo rm -Rf /usr/lib/python2.7/site-packages/tripleo_common*
