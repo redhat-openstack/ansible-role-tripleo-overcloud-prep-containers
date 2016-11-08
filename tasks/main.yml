@@ -3,3 +3,7 @@
 - include: create-scripts.yml
   tags:
     - undercloud-scripts
+
+- include: overcloud-prep-containers.yml
+  tags:
+    - containers

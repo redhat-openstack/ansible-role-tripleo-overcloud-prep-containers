@@ -94,8 +94,8 @@ cat /home/stack/containers-default-parameters.yaml
 ## * Rebuild heat-agents image and push to local registry
 ## ::
 
-docker build -t "192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
-docker push 192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka
+sudo docker build -t "192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
+sudo docker push 192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka
 
 ## * Update TripleO-Common
 pushd tripleo-common
