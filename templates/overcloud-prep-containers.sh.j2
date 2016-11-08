@@ -52,31 +52,31 @@ uploads:
     - imagename: tripleoupstream/heat-docker-agents:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
     - imagename: tripleoupstream/centos-binary-nova-compute:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
     - imagename: tripleoupstream/centos-binary-nova-libvirt:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
     - imagename: tripleoupstream/centos-binary-keystone:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
     - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
     - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
     - imagename: tripleoupstream/centos-binary-openvswitch-db-server:mitaka
       uploader: docker
       pull_source: docker.io
-      push_destination: 192.168.24.1:8787
+      push_destination: localhost:8787
 EOF'
 
 
@@ -94,8 +94,8 @@ cat /home/stack/containers-default-parameters.yaml
 ## * Rebuild heat-agents image and push to local registry
 ## ::
 
-sudo docker build -t "192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
-sudo docker push 192.168.24.1:8787/tripleoupstream/heat-docker-agents:mitaka
+sudo docker build -t "localhost:8787/tripleoupstream/heat-docker-agents:newton" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
+sudo docker push localhost:8787/tripleoupstream/heat-docker-agents:newton
 
 ## * Update TripleO-Common
 pushd tripleo-common
@@ -113,6 +113,8 @@ done
 
 popd
 
+## * Get the journal logs for docker
+sudo journalctl -u docker > docker_journalctl.log
 
 
 ### --stop_docs
