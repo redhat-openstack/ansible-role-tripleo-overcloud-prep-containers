@@ -93,7 +93,7 @@ EOF'
 ## * Populate the docker registery
 ## ::
 
-sudo python -c "from tripleo_common.image.image_uploader import ImageUploadManager ; ImageUploadManager(['/home/stack/tripleo-common/contrib/overcloud_containers.yaml']).upload()"
+sudo python {{ working_dir }}/upload_images_to_local_registry.py
 
 ## * Configure the environments/docker.yaml, this is done automatically.
 ## ::
