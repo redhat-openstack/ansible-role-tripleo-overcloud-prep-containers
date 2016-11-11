@@ -1,36 +1,77 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+[WIP ROLE]  This role walks through the developer setup for a tripleo deployment with a containerized compute.
+The developer documentation can be found here: https://etherpad.openstack.org/p/tripleo-containers-work
+
+The instructions below use the master branch from delorean that has been vetted by CI, and then updates
+any tripleo rpm to the latest version available from delorean.  It should be the same content as what
+currently runs in tripleo-ci
+
+This also git checks out https://git.openstack.org/openstack/tripleo-heat-templates
+with refspec: refs/changes/59/330659/43 , this can be updated in config/general_config/containers_minimal.yml
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+https://github.com/openstack/tripleo-quickstart/blob/master/README.rst
 
-Role Variables
+
+overcloud-prep-containers variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+* working_dir: /home/stack
+* containerized_compute: false
+* overcloud_prep_containers_script: overcloud-prep-containers.sh.j2
+* containers_default_parameters: container-default-parameters.yaml.j2
+* overcloud_prep_containers_log: overcloud_prep_containers.log
+* container_image: CentOS-Atomic-Host-7-GenericCloud.qcow2
+* container_url: "http://cloud.centos.org/centos/7/atomic/images/{{ container_image}}.gz"
+* undercloud_network_cidr: 192.168.24.0/24
+* ctl_plane_ip: "{{undercloud_network_gateway|default(undercloud_network_cidr|nthhost(1))}}"
+
+overcloud-prep-config variables
+-------------------------------
+
+* overcloud_templates_path: /home/stack/tripleo-heat-templates
+* overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
+* overcloud_templates_refspec: refs/changes/59/330659/43
+
+tripleo-quickstart variables
+----------------------------
+
+* see config/general_config/containers_minimal.yml
+
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+These dependencies are accounted for in the unmerged tripleo-quickstart review https://review.openstack.org/#/c/393348/
 
-Example Playbook
-----------------
+* Depends-On: https://review.openstack.org/#/c/393348/
+* Depends-On: https://review.gerrithub.io/#/c/300328/
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+How to Execute:
+---------------
+Review https://github.com/openstack/tripleo-quickstart/blob/master/README.rst::
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+	git clone https://github.com/openstack/tripleo-quickstart.git
+	cd tripleo-quickstart
+	git-review -d I676b429cab920516a151b124fca2e26dd5c5e87b
+
+	export WD=/var/tmp/containers
+	export VIRTHOST=<virthost>
+
+	./quickstart.sh --no-clone --working-dir $WD --teardown all --requirements quickstart-extras-requirements.txt --playbook quickstart-extras.yml --config $PWD/config/general_config/containers_minimal.yml --tags all  --release master-tripleo-ci $VIRTHOST
+
+
 
 License
 -------
 
-BSD
+Apache 2.0
 
 Author Information
 ------------------
