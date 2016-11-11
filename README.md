@@ -1,4 +1,4 @@
-Role Name
+ansible-role-tripleo-overcloud-prep-containers
 =========
 
 [WIP ROLE]  This role walks through the developer setup for a tripleo deployment with a containerized compute.
