@@ -48,6 +48,7 @@ sudo systemctl restart openstack-heat-engine
 ## * Set the REGISTRY ADDRESS to 127.0.0.1 for the upload
 ## ::
 
+# **WORKAROUND** unable to push when registry address is 192.168.24.1 / control_plane_ip
 sudo sed -i s/REGISTRY_ADDRESS={{ ctl_plane_ip }}/REGISTRY_ADDRESS=127.0.0.1/g /etc/sysconfig/docker-registry
 sudo systemctl restart docker-registry
 sudo systemctl restart docker
@@ -114,9 +115,11 @@ echo "============================="
 sudo docker build -t "localhost:8787/tripleoupstream/heat-docker-agents:newton" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
 sudo docker push localhost:8787/tripleoupstream/heat-docker-agents:newton
 
+## 
 ## * Set the REGISTRY ADDRESS back to the original ip
 ## ::
 
+# **WORKAROUND** unable to push when registry address is 192.168.24.1 / control_plane_ip
 sudo sed -i s/REGISTRY_ADDRESS=127.0.0.1/REGISTRY_ADDRESS={{ ctl_plane_ip }}/g /etc/sysconfig/docker-registry
 sudo systemctl restart docker-registry
 sudo systemctl restart docker
