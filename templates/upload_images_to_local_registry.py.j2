@@ -1,5 +1,6 @@
 # Upload images to local registry
-import errno
+#import errno
+#import requests
 import time
 
 from socket import error as SocketError
@@ -11,7 +12,10 @@ for i in range(0,3):
   try:
     mgr.upload()
     print("The upload was successfull")
-  except SocketError as e:
+
+  # this seems to break in various ways
+  # except (SocketError, requests.ConnectionError) as e:
+  except Exception as e:
     print(str(e.args) + " retry attempt: " + str(i+1))
     time.sleep(20)
     continue

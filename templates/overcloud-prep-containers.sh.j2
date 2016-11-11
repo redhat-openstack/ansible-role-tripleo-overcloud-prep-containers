@@ -40,6 +40,11 @@ sudo easy_install docker-py
 
 {% endif %}
 
+## * Update heat's max_nested_stack_depth
+## ::
+sudo sed -i 's/#max_nested_stack_depth = 5/max_nested_stack_depth = 6/' /etc/heat/heat.conf
+sudo systemctl restart openstack-heat-engine
+
 ## * Set the REGISTRY ADDRESS to 127.0.0.1 for the upload
 ## ::
 
@@ -58,31 +63,31 @@ git clone https://github.com/openstack/tripleo-common.git
 bash -c 'cat <<EOF > /home/stack/tripleo-common/contrib/overcloud_containers.yaml
 # put this in /home/stack/tripleo-common/contrib/
 uploads:
-    - imagename: tripleoupstream/heat-docker-agents:mitaka
+    - imagename: tripleoupstream/heat-docker-agents:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
-    - imagename: tripleoupstream/centos-binary-nova-compute:mitaka
+    - imagename: tripleoupstream/centos-binary-nova-compute:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
-    - imagename: tripleoupstream/centos-binary-nova-libvirt:mitaka
+    - imagename: tripleoupstream/centos-binary-nova-libvirt:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
-    - imagename: tripleoupstream/centos-binary-keystone:mitaka
+    - imagename: tripleoupstream/centos-binary-keystone:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
-    - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:mitaka
+    - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
-    - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:mitaka
+    - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
-    - imagename: tripleoupstream/centos-binary-openvswitch-db-server:mitaka
+    - imagename: tripleoupstream/centos-binary-openvswitch-db-server:latest
       uploader: docker
       pull_source: docker.io
       push_destination: localhost:8787
