@@ -57,14 +57,58 @@ How to Execute:
 ---------------
 Review https://github.com/openstack/tripleo-quickstart/blob/master/README.rst::
 
-	git clone https://github.com/openstack/tripleo-quickstart.git
-	cd tripleo-quickstart
-	git-review -d I676b429cab920516a151b124fca2e26dd5c5e87b
+    git clone https://github.com/openstack/tripleo-quickstart.git
+    cd tripleo-quickstart
+    git-review -d I676b429cab920516a151b124fca2e26dd5c5e87b
 
-	export WD=/var/tmp/containers
-	export VIRTHOST=<virthost>
+    export WD=/var/tmp/containers
+    export VIRTHOST=<virthost>
 
-	./quickstart.sh --no-clone --working-dir $WD --teardown all --requirements quickstart-extras-requirements.txt --playbook quickstart-extras.yml --config $PWD/config/general_config/containers_minimal.yml --tags all  --release master-tripleo-ci $VIRTHOST
+    ./quickstart.sh --no-clone --working-dir $WD --teardown all --requirements quickstart-extras-requirements.txt --playbook quickstart-extras.yml --config $PWD/config/general_config/containers_minimal.yml --tags all  --release master-tripleo-ci $VIRTHOST
+
+How to Execute with Additional gerrit reviews
+---------------------------------------------
+
+This will install a local delorean instance and build the reviews into the undercloud/overcloud
+Example change https://review.openstack.org/#/c/396460/
+
+STEPS::
+
+    export GERRIT_HOST=review.openstack.org
+    export GERRIT_BRANCH=master
+    export GERRIT_CHANGE_ID=396460
+    export GERRIT_PATCHSET_REVISION=3ea99ef27f60157699c13acb64f88d2cd03d237b
+
+    # Note.. FOR RHEL VIRTHOST's
+    * ensure mock is installed on the virthost *, for rhel it comes from epel.. then remove the epel repo
+
+    # Build the yum repo in  /home/stack of the $VIRTHOST
+    ./quickstart.sh \
+    --no-clone \
+    --working-dir $WD \
+    --teardown all \
+    --requirements quickstart-extras-requirements.txt \
+    --playbook dlrn-gate.yml \
+    --config $PWD/config/general_config/containers_minimal.yml \
+    --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+    --tags all  \
+    --release master-tripleo-ci \
+    $VIRTHOST
+
+    # Consume the local delorean repo in addition to the normal deployment
+    ./quickstart.sh \
+    --no-clone \
+    --working-dir $WD \
+    --teardown none \
+    --retain-inventory \
+    --requirements quickstart-extras-requirements.txt \
+    --playbook quickstart-extras.yml \
+    --config $PWD/config/general_config/containers_minimal.yml \
+    --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+    --skip-tags provision \
+    --tags all  \
+    --release master-tripleo-ci \
+    $VIRTHOST
 
 
 
