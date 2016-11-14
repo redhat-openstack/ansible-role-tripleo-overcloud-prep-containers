@@ -49,9 +49,10 @@ sudo systemctl restart openstack-heat-engine
 ## ::
 
 # **WORKAROUND** unable to push when registry address is 192.168.24.1 / control_plane_ip
-sudo sed -i s/REGISTRY_ADDRESS={{ ctl_plane_ip }}/REGISTRY_ADDRESS=127.0.0.1/g /etc/sysconfig/docker-registry
-sudo systemctl restart docker-registry
-sudo systemctl restart docker
+# testing fix https://review.openstack.org/#/c/396460/
+# sudo sed -i s/REGISTRY_ADDRESS={{ ctl_plane_ip }}/REGISTRY_ADDRESS=127.0.0.1/g /etc/sysconfig/docker-registry
+# sudo systemctl restart docker-registry
+# sudo systemctl restart docker
 
 
 ## * Checkout TripleO-Common
@@ -67,31 +68,31 @@ uploads:
     - imagename: tripleoupstream/heat-docker-agents:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
     - imagename: tripleoupstream/centos-binary-nova-compute:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
     - imagename: tripleoupstream/centos-binary-nova-libvirt:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
     - imagename: tripleoupstream/centos-binary-keystone:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
     - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
     - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
     - imagename: tripleoupstream/centos-binary-openvswitch-db-server:latest
       uploader: docker
       pull_source: docker.io
-      push_destination: localhost:8787
+      push_destination: {{ ctl_plane_ip }}:8787
 EOF'
 
 
@@ -120,9 +121,10 @@ sudo docker push localhost:8787/tripleoupstream/heat-docker-agents:newton
 ## ::
 
 # **WORKAROUND** unable to push when registry address is 192.168.24.1 / control_plane_ip
-sudo sed -i s/REGISTRY_ADDRESS=127.0.0.1/REGISTRY_ADDRESS={{ ctl_plane_ip }}/g /etc/sysconfig/docker-registry
-sudo systemctl restart docker-registry
-sudo systemctl restart docker
+# testing fix https://review.openstack.org/#/c/396460/
+# sudo sed -i s/REGISTRY_ADDRESS=127.0.0.1/REGISTRY_ADDRESS={{ ctl_plane_ip }}/g /etc/sysconfig/docker-registry
+# sudo systemctl restart docker-registry
+# sudo systemctl restart docker
 
 ## * Update TripleO-Common
 pushd tripleo-common
