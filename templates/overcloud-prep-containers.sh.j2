@@ -54,6 +54,8 @@ sudo systemctl restart openstack-heat-engine
 # sudo systemctl restart docker-registry
 # sudo systemctl restart docker
 
+# **WORKAROUND** port 8787 is not open on the undercloud
+sudo iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 8787 -j ACCEPT
 
 ## * Checkout TripleO-Common
 ## ::
