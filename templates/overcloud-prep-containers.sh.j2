@@ -50,9 +50,6 @@ sudo systemctl restart openstack-heat-engine
 
 # **WORKAROUND** unable to push when registry address is 192.168.24.1 / control_plane_ip
 # testing fix https://review.openstack.org/#/c/396460/
-# sudo sed -i s/REGISTRY_ADDRESS={{ ctl_plane_ip }}/REGISTRY_ADDRESS=127.0.0.1/g /etc/sysconfig/docker-registry
-# sudo systemctl restart docker-registry
-# sudo systemctl restart docker
 
 # **WORKAROUND** port 8787 is not open on the undercloud
 sudo iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 8787 -j ACCEPT
@@ -118,17 +115,24 @@ echo "============================="
 sudo docker build -t "{{ ctl_plane_ip }}:8787/tripleoupstream/heat-docker-agents:newton" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
 sudo docker push {{ ctl_plane_ip }}:8787/tripleoupstream/heat-docker-agents:newton
 
-## 
+
 ## * Set the REGISTRY ADDRESS back to the original ip
 ## ::
 
 # **WORKAROUND** unable to push when registry address is 192.168.24.1 / control_plane_ip
 # testing fix https://review.openstack.org/#/c/396460/
-# sudo sed -i s/REGISTRY_ADDRESS=127.0.0.1/REGISTRY_ADDRESS={{ ctl_plane_ip }}/g /etc/sysconfig/docker-registry
-# sudo systemctl restart docker-registry
-# sudo systemctl restart docker
+
+## * Deploy Puppet Artifacts to the Overcloud
+## ::
+
+wget https://raw.githubusercontent.com/mandre/dotfiles/master/bin/pull_puppet_modules.sh
+chmod +x pull_puppet_modules.sh
+bash pull_puppet_modules.sh
+
+bash tripleo-common/scripts/upload-puppet-modules --directory ~/puppet-modules/
 
 ## * Update TripleO-Common
+## ::
 pushd tripleo-common
 
 sudo rm -Rf /usr/lib/python2.7/site-packages/tripleo_common*
