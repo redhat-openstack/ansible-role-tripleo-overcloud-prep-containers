@@ -1,0 +1,7 @@
+Code-Review+2: wes hayutin <weshayutin@gmail.com>
+Verified+1: wes hayutin <weshayutin@gmail.com>
+Submitted-by: wes hayutin <weshayutin@gmail.com>
+Submitted-at: Wed, 16 Nov 2016 18:00:05 -0500
+Reviewed-on: https://review.gerrithub.io/302416
+Project: redhat-openstack/ansible-role-tripleo-overcloud-prep-containers
+Branch: refs/heads/master
