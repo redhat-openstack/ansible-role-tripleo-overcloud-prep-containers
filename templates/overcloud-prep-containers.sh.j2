@@ -112,7 +112,7 @@ echo "============================="
 ## * Rebuild heat-agents image and push to local registry
 ## ::
 
-sudo docker build -t "{{ ctl_plane_ip }}:8787/tripleoupstream/heat-docker-agents:newton" --build-arg OPENSTACK_RELEASE=newton /home/stack/tripleo-common/heat_docker_agent/
+sudo docker build -t "{{ ctl_plane_ip }}:8787/tripleoupstream/heat-docker-agents:newton" /home/stack/tripleo-common/heat_docker_agent/
 sudo docker push {{ ctl_plane_ip }}:8787/tripleoupstream/heat-docker-agents:newton
 
 
