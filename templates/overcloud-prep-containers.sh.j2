@@ -61,9 +61,7 @@ git clone https://github.com/openstack/tripleo-common.git
 # WORKAROUND, add python-memcached
 # https://review.openstack.org/#/c/398582/
 pushd tripleo-common
-git remote add gerrit https://review.openstack.org/openstack/tripleo-common
-git fetch --all
-git review -d I4ffdf75ddbceccf2c9367b9eb342aefdeb35750b
+git fetch https://git.openstack.org/openstack/tripleo-common refs/changes/82/398582/1 && git checkout FETCH_HEAD
 popd
 
 ## * Create Overcloud Containers Uploads template
