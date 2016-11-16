@@ -58,6 +58,14 @@ sudo iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 8787 -j ACCEPT
 ## ::
 git clone https://github.com/openstack/tripleo-common.git
 
+# WORKAROUND, add python-memcached
+# https://review.openstack.org/#/c/398582/
+pushd tripleo-common
+git remote add gerrit https://review.openstack.org/openstack/tripleo-common
+git fetch --all
+git review -d I4ffdf75ddbceccf2c9367b9eb342aefdeb35750b
+popd
+
 ## * Create Overcloud Containers Uploads template
 ## ::
 
@@ -134,12 +142,6 @@ bash tripleo-common/scripts/upload-puppet-modules --directory ~/puppet-modules/
 ## * Update TripleO-Common
 ## ::
 pushd tripleo-common
-
-# WORKAROUND, add python-memcached
-# https://review.openstack.org/#/c/398582/
-git remote add gerrit https://review.openstack.org/openstack/tripleo-common
-git fetch --all
-git review -d I4ffdf75ddbceccf2c9367b9eb342aefdeb35750b
 
 sudo rm -Rf /usr/lib/python2.7/site-packages/tripleo_common*
 sudo python setup.py install
