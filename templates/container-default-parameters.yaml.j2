@@ -5,10 +5,10 @@ parameter_defaults:
   DockerNamespace: 192.168.24.1:8787/tripleoupstream
   # Enable local Docker registry
   DockerNamespaceIsRegistry: true
-  DockerAgentImage: heat-docker-agents:newton
+  DockerAgentImage: heat-docker-agents:rdo-latest
   # Docker containers
-  DockerNovaComputeImage: centos-binary-nova-compute:newton
-  DockerLibvirtImage: centos-binary-nova-libvirt:newton
-  DockerOpenvswitchImage: centos-binary-neutron-openvswitch-agent:newton
-  DockerOvsVswitchdImage: centos-binary-openvswitch-vswitchd:newton
-  DockerOpenvswitchDBImage: centos-binary-openvswitch-db-server:newton
+  DockerNovaComputeImage: centos-binary-nova-compute:rdo-latest
+  DockerLibvirtImage: centos-binary-nova-libvirt:rdo-latest
+  DockerOpenvswitchImage: centos-binary-neutron-openvswitch-agent:rdo-latest
+  DockerOvsVswitchdImage: centos-binary-openvswitch-vswitchd:rdo-latest
+  DockerOpenvswitchDBImage: centos-binary-openvswitch-db-server:rdo-latest
