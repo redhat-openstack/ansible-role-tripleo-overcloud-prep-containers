@@ -135,6 +135,12 @@ bash tripleo-common/scripts/upload-puppet-modules --directory ~/puppet-modules/
 ## ::
 pushd tripleo-common
 
+# WORKAROUND, add python-memcached
+# https://review.openstack.org/#/c/398582/
+git remote add gerrit https://review.openstack.org/openstack/tripleo-common
+git fetch --all
+git review -d I4ffdf75ddbceccf2c9367b9eb342aefdeb35750b
+
 sudo rm -Rf /usr/lib/python2.7/site-packages/tripleo_common*
 sudo python setup.py install
 sudo cp /usr/share/tripleo-common/sudoers /etc/sudoers.d/tripleo-common
