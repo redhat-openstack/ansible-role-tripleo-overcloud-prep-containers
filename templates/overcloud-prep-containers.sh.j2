@@ -17,6 +17,14 @@ set -eux
 
 source {{ working_dir }}/stackrc
 
+## * Set the DNS Server for neutron
+## ::
+
+subnet_uuid=`neutron subnet-list | grep 192.168.24 | awk '{ print $2 }'`
+echo $subnet_uuid
+neutron subnet-update $subnet_uuid --dns-nameserver 192.168.23.1
+neutron subnet-show $subnet_uuid
+
 {% if containerized_compute %}
 ## * Download the Cloud Atomic Image and upload to glance
 ## ::
