@@ -78,31 +78,27 @@ popd
 bash -c 'cat <<EOF > /home/stack/tripleo-common/contrib/overcloud_containers.yaml
 # put this in /home/stack/tripleo-common/contrib/
 uploads:
-    - imagename: tripleoupstream/heat-docker-agents:latest
+    - imagename: tripleoupstream/centos-binary-nova-compute:newton
       uploader: docker
       pull_source: docker.io
       push_destination: {{ ctl_plane_ip }}:8787
-    - imagename: tripleoupstream/centos-binary-nova-compute:latest
+    - imagename: tripleoupstream/centos-binary-nova-libvirt:newton
       uploader: docker
       pull_source: docker.io
       push_destination: {{ ctl_plane_ip }}:8787
-    - imagename: tripleoupstream/centos-binary-nova-libvirt:latest
+    - imagename: tripleoupstream/centos-binary-keystone:newton
       uploader: docker
       pull_source: docker.io
       push_destination: {{ ctl_plane_ip }}:8787
-    - imagename: tripleoupstream/centos-binary-keystone:latest
+    - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:newton
       uploader: docker
       pull_source: docker.io
       push_destination: {{ ctl_plane_ip }}:8787
-    - imagename: tripleoupstream/centos-binary-neutron-openvswitch-agent:latest
+    - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:newton
       uploader: docker
       pull_source: docker.io
       push_destination: {{ ctl_plane_ip }}:8787
-    - imagename: tripleoupstream/centos-binary-openvswitch-vswitchd:latest
-      uploader: docker
-      pull_source: docker.io
-      push_destination: {{ ctl_plane_ip }}:8787
-    - imagename: tripleoupstream/centos-binary-openvswitch-db-server:latest
+    - imagename: tripleoupstream/centos-binary-openvswitch-db-server:newton
       uploader: docker
       pull_source: docker.io
       push_destination: {{ ctl_plane_ip }}:8787
