@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa53dc9_88f95bcb",
+        "filename": "templates/overcloud-prep-containers.sh.j2",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006102
+      },
+      "writtenOn": "2016-11-18T16:53:16Z",
+      "side": 1,
+      "message": "We do not yet use a containerized keystone, so I didn\u0027t push a new image.\nhttps://hub.docker.com/r/tripleoupstream/centos-binary-keystone/tags/\n\nYour pull will likely fail.",
+      "revId": "ea34b44ff7b696fd87f3f2cef517b7c28333d3f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
