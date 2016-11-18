@@ -145,23 +145,6 @@ bash pull_puppet_modules.sh
 
 bash tripleo-common/scripts/upload-puppet-modules --directory ~/puppet-modules/
 
-## * Update TripleO-Common
-## ::
-pushd tripleo-common
-
-sudo rm -Rf /usr/lib/python2.7/site-packages/tripleo_common*
-sudo python setup.py install
-sudo cp /usr/share/tripleo-common/sudoers /etc/sudoers.d/tripleo-common
-sudo systemctl restart openstack-mistral-executor
-sudo systemctl restart openstack-mistral-engine # this loads the actions via entrypoints
-sudo mistral-db-manage populate # make sure the new actions got loaded
-mistral action-list | grep tripleo
-for workbook in workbooks/*.yaml; do
-    mistral workbook-update $workbook
-done
-
-popd
-
 ## * Get the journal logs for docker
 sudo journalctl -u docker > docker_journalctl.log
 
