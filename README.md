@@ -59,7 +59,9 @@ Review https://github.com/openstack/tripleo-quickstart/blob/master/README.rst::
 
     git clone https://github.com/openstack/tripleo-quickstart.git
     cd tripleo-quickstart
-    git-review -d I676b429cab920516a151b124fca2e26dd5c5e87b
+    git fetch --all
+    git review -d Ide7e3814809c54ee57225db848e014f482a60ec7
+    git review -x I676b429cab920516a151b124fca2e26dd5c5e87b
 
     export WD=/var/tmp/containers
     export VIRTHOST=<virthost>
