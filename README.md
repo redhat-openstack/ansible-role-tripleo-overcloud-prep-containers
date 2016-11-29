@@ -36,7 +36,8 @@ overcloud-prep-config variables
 
 * overcloud_templates_path: /home/stack/tripleo-heat-templates
 * overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
-* overcloud_templates_refspec: refs/changes/59/330659/43
+* overcloud_templates_branch: master
+
 
 tripleo-quickstart variables
 ----------------------------
@@ -57,14 +58,33 @@ How to Execute:
 ---------------
 Review https://github.com/openstack/tripleo-quickstart/blob/master/README.rst::
 
+    mkdir quickstart_containers
+    export WORKSPACE=$PWD/quickstart_containers
+    cd $WORKSPACE
     git clone https://github.com/openstack/tripleo-quickstart.git
-    cd tripleo-quickstart
-    git fetch --all
-    git review -d Ide7e3814809c54ee57225db848e014f482a60ec7
-    git review -x I676b429cab920516a151b124fca2e26dd5c5e87b
+    git clone https://github.com/openstack/tripleo-quickstart-extras.git
 
+    # Update quickstart to use the right review
+    pushd tripleo-quickstart
+    git remote add gerrit https://review.openstack.org/openstack/tripleo-quickstart
+    git fetch --all
+    git review -d I676b429cab920516a151b124fca2e26dd5c5e87b
+    popd
+
+    # Update quickstart-extras to use the right review
+    pushd tripleo-quickstart-extras
+    git remote add gerrit https://review.openstack.org/openstack/tripleo-quickstart-extras
+    git fetch --all
+    git-review -d Id91cfae8aff8652222a4e9adab0635be6c0f8f64
+    git-review -x Ie1ca08de17ff0fddd9c9cbd124ae65735ea4b6bc
+    popd
+
+    mkdir /var/tmp/containers
     export WD=/var/tmp/containers
     export VIRTHOST=<virthost>
+
+    pushd tripleo-quickstart
+    sed -i "s|git+https://git.openstack.org/openstack|file://$WORKSPACE|g" quickstart-extras-requirements.txt
 
     ./quickstart.sh --no-clone --working-dir $WD --teardown all --requirements quickstart-extras-requirements.txt --playbook quickstart-extras.yml --config $PWD/config/general_config/containers_minimal.yml --tags all  --release master-tripleo-ci $VIRTHOST
 
